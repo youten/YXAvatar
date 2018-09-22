@@ -586,9 +586,9 @@ MonoBehaviour:
   _targetModel: 6
   _targetPos: {fileID: 1377988139}
   _targetHeadRot: {fileID: 956230834}
-  _HeadRot2: {fileID: 1673946824}
-  _HeadRot3: {fileID: 991460968}
-  _HeadRot4: {fileID: 449337803}
+  _headRot2: {fileID: 1673946824}
+  _headRot3: {fileID: 991460968}
+  _headRot4: {fileID: 449337803}
   _targetBlendShape: {fileID: 344617883}
   _leftEyeRot: {fileID: 1377988141}
   _rightEyeRot: {fileID: 1377988140}

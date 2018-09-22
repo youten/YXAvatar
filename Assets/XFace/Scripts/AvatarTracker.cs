@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.XR.iOS;
 
 namespace XFace
@@ -20,9 +21,9 @@ namespace XFace
         [SerializeField] private Model _targetModel = Model.Sana;
         [SerializeField] private Transform _targetPos;
         [SerializeField] private Transform _targetHeadRot;
-        [SerializeField] private Transform _HeadRot2;
-        [SerializeField] private Transform _HeadRot3;
-        [SerializeField] private Transform _HeadRot4;
+        [SerializeField] private Transform _headRot2;
+        [SerializeField] private Transform _headRot3;
+        [SerializeField] private Transform _headRot4;
         [SerializeField] private SkinnedMeshRenderer _targetBlendShape;
         [SerializeField] private Transform _leftEyeRot;
         [SerializeField] private Transform _rightEyeRot;
@@ -61,7 +62,6 @@ namespace XFace
         // for Andelte v1.6 https://booth.pm/ja/items/999401
         private const int AndelteLeftBlink = 21;
         private const int AndelteRightBlink = 22;
-        // eyeWide not supported
         private const int AndelteA = 0; // jawOpen
         private const int AndelteMouthFlat = 10; // 1 - mouthSmile
         private const int AndelteWear = 30; // eye star
@@ -94,9 +94,9 @@ namespace XFace
 
         private void Start()
         {
-            if (_HeadRot2 && _HeadRot3 && _HeadRot4)
+            if (_headRot2 && _headRot3 && _headRot4)
             {
-                _poser = new Poser(_targetPos, _targetHeadRot, _HeadRot2, _HeadRot3, _HeadRot4);
+                _poser = new Poser(_targetPos, _targetHeadRot, _headRot2, _headRot3, _headRot4);
             }
             else
             {
@@ -166,10 +166,7 @@ namespace XFace
 
         private void LateUpdate()
         {
-            if (_poser != null)
-            {
-                _poser.Apply();
-            }
+            _poser?.Apply();
             UpdateBlendShapes();
         }
 
@@ -299,7 +296,7 @@ namespace XFace
                 _targetBlendShape.SetBlendShapeWeight(VRoidRightBlinkJoy,
                     _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
-                _targetBlendShape.SetBlendShapeWeight(VRoidMouthFun, mouthSmile * 100.0f);                
+                _targetBlendShape.SetBlendShapeWeight(VRoidMouthFun, mouthSmile * 100.0f);
             }
 
             // hidarime
@@ -329,18 +326,18 @@ namespace XFace
             }
         }
 
-        private void SetActiveByName(bool isActive, Transform root, string name)
+        private static void SetActiveByName(bool isActive, Transform root, string targetName)
         {
-            var target = FindDeep(root, name);
+            var target = FindDeep(root, targetName);
             if (target)
             {
                 target.gameObject.SetActive(isActive);
             }
         }
 
-        private Transform FindDeep(Transform root, string name)
+        private static Transform FindDeep(Transform root, string targetName)
         {
-            return System.Array.Find(root.GetComponentsInChildren<Transform>(true), c => c.name == name);
+            return System.Array.Find(root.GetComponentsInChildren<Transform>(true), c => c.name == targetName);
         }
     }
 }
