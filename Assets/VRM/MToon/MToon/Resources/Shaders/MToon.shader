@@ -128,6 +128,6 @@ Shader "VRM/MToon"
         UsePass "Standard/SHADOWCASTER"
     }
     
-    Fallback "Unlit/Texture"
+    Fallback "Unlit/Transparent Cutout"
     CustomEditor "MToonInspector"
 }
