@@ -31,7 +31,7 @@ namespace XFace
         [SerializeField] private AnimationCurve _eyeBlinkCurve;
 
         private Poser _poser;
-        private Dictionary<string, float> _currentBlendShapes;
+        private float[] _pose;
 
         // for sana_v1.01 https://536.booth.pm/items/990997
         private const int SanaLeftBlink = 2;
@@ -106,21 +106,7 @@ namespace XFace
 
         public void UpdateTracking(Vector3 pos, Vector3 rot, Dictionary<string, float> blendShapes)
         {
-            if (_poser != null)
-            {
-                var p = new Vector3(
-                    pos.y,
-                    -pos.x,
-                    pos.z * 1.5f);
-                var r = Quaternion.Euler(
-                    -rot.y,
-                    -rot.x,
-                    -rot.z + 90.0f);
-
-                _poser.Update(p, r);
-            }
-
-            _currentBlendShapes = blendShapes;
+            _pose = ARKitPose.ToArray(pos, rot, blendShapes);
         }
 
         private bool _isWearing;
@@ -166,34 +152,47 @@ namespace XFace
 
         private void LateUpdate()
         {
-            _poser?.Apply();
-            UpdateBlendShapes();
+            UpdatePose();
         }
 
-        private void UpdateBlendShapes()
+        private void UpdatePose()
         {
-            if (!_targetBlendShape || _currentBlendShapes == null)
+            if (!_targetBlendShape || _pose == null)
             {
                 return;
             }
 
-            float eyeWide = (_currentBlendShapes[ARBlendShapeLocation.EyeWideLeft]
-                             + _currentBlendShapes[ARBlendShapeLocation.EyeWideRight]) * 0.5f;
-            float mouthSmile = 0.2f + (_currentBlendShapes[ARBlendShapeLocation.MouthSmileLeft]
-                                       + _currentBlendShapes[ARBlendShapeLocation.MouthSmileRight]) * 0.5f;
+            if (_poser != null)
+            {
+                var p = new Vector3(
+                    _pose[ARKitPose.Index.PosY],
+                    -_pose[ARKitPose.Index.PosX],
+                    _pose[ARKitPose.Index.PosZ] * 1.5f);
+                var r = Quaternion.Euler(
+                    -_pose[ARKitPose.Index.RotY],
+                    -_pose[ARKitPose.Index.RotX],
+                    -_pose[ARKitPose.Index.RotZ] + 90.0f);
+
+                _poser.Update(p, r);
+            }
+
+            float eyeWide = (_pose[ARKitPose.Index.EyeWideLeft]
+                             + _pose[ARKitPose.Index.EyeWideRight]) * 0.5f;
+            float mouthSmile = 0.2f + (_pose[ARKitPose.Index.MouthSmileLeft]
+                                       + _pose[ARKitPose.Index.MouthSmileRight]) * 0.5f;
             if (_targetModel == Model.Sana)
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(SanaA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide
                 _targetBlendShape.SetBlendShapeWeight(SanaMihiraki, eyeWide * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(SanaMegashiraage, eyeWide * 100.0f);
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(SanaLeftBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(SanaRightBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(SanaKoukakuage, mouthSmile * 100.0f);
             }
@@ -201,15 +200,15 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(YuniA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide
                 _targetBlendShape.SetBlendShapeWeight(YuniMihiraki, eyeWide * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(YuniMegashiraage, eyeWide * 100.0f);
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(YuniLeftBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(YuniRightBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(YuniKoukakuage, mouthSmile * 100.0f);
             }
@@ -217,14 +216,14 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(HaneruA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide
                 _targetBlendShape.SetBlendShapeWeight(HaneruMihiraki, eyeWide * 100.0f);
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(HaneruLeftBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(HaneruRightBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(HaneruMouthFlat, (0.8f - mouthSmile) * 100.0f);
             }
@@ -232,24 +231,24 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(AndelteA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide not supported
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(AndelteLeftBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(AndelteRightBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(AndelteMouthFlat, (0.6f - mouthSmile) * 100.0f);
                 // look-right,left,up,down morph
-                float lookRight = (_currentBlendShapes[ARBlendShapeLocation.EyeLookInLeft]
-                                   + _currentBlendShapes[ARBlendShapeLocation.EyeLookOutRight]) * 0.5f;
-                float lookLeft = (_currentBlendShapes[ARBlendShapeLocation.EyeLookOutLeft]
-                                  + _currentBlendShapes[ARBlendShapeLocation.EyeLookInRight]) * 0.5f;
-                float lookUp = (_currentBlendShapes[ARBlendShapeLocation.EyeLookUpLeft]
-                                + _currentBlendShapes[ARBlendShapeLocation.EyeLookUpRight]) * 0.5f;
-                float lookDown = (_currentBlendShapes[ARBlendShapeLocation.EyeLookDownLeft]
-                                  + _currentBlendShapes[ARBlendShapeLocation.EyeLookDownLeft]) * 0.5f;
+                float lookRight = (_pose[ARKitPose.Index.EyeLookInLeft]
+                                   + _pose[ARKitPose.Index.EyeLookOutRight]) * 0.5f;
+                float lookLeft = (_pose[ARKitPose.Index.EyeLookOutLeft]
+                                  + _pose[ARKitPose.Index.EyeLookInRight]) * 0.5f;
+                float lookUp = (_pose[ARKitPose.Index.EyeLookUpLeft]
+                                + _pose[ARKitPose.Index.EyeLookUpRight]) * 0.5f;
+                float lookDown = (_pose[ARKitPose.Index.EyeLookDownLeft]
+                                  + _pose[ARKitPose.Index.EyeLookDownLeft]) * 0.5f;
                 _targetBlendShape.SetBlendShapeWeight(AndelteEyeMigi, lookRight * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(AndelteEyeHidari, lookLeft * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(AndelteEyeUe, lookUp * 80.0f);
@@ -259,12 +258,12 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(FencerA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide
                 _targetBlendShape.SetBlendShapeWeight(FencerMehiraki, eyeWide * 100.0f);
                 // eyeBlink
-                float eyeBlink = (_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft] +
-                                  _currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 0.5f;
+                float eyeBlink = (_pose[ARKitPose.Index.EyeBlinkLeft] +
+                                  _pose[ARKitPose.Index.EyeBlinkRight]) * 0.5f;
                 _targetBlendShape.SetBlendShapeWeight(FencerBlink,
                     _eyeBlinkCurve.Evaluate(eyeBlink) * 100.0f);
                 // mouthSmile
@@ -274,13 +273,13 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(ShacloA,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide not supported
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(ShacloLeftBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(ShacloRightBlink,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(ShacloMouthNiko, mouthSmile * 100.0f);
             }
@@ -288,13 +287,13 @@ namespace XFace
             {
                 // jawOpen
                 _targetBlendShape.SetBlendShapeWeight(VRoidMouthJoy,
-                    _jawOpenCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.JawOpen]) * 100.0f);
+                    _jawOpenCurve.Evaluate(_pose[ARKitPose.Index.JawOpen]) * 100.0f);
                 // eyeWide not supported
                 // eyeBlink
                 _targetBlendShape.SetBlendShapeWeight(VRoidLeftBlinkJoy,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkLeft]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkLeft]) * 100.0f);
                 _targetBlendShape.SetBlendShapeWeight(VRoidRightBlinkJoy,
-                    _eyeBlinkCurve.Evaluate(_currentBlendShapes[ARBlendShapeLocation.EyeBlinkRight]) * 100.0f);
+                    _eyeBlinkCurve.Evaluate(_pose[ARKitPose.Index.EyeBlinkRight]) * 100.0f);
                 // mouthSmile
                 _targetBlendShape.SetBlendShapeWeight(VRoidMouthFun, mouthSmile * 100.0f);
             }
@@ -302,10 +301,10 @@ namespace XFace
             // hidarime
             if (_leftEyeRot)
             {
-                float lookInLeft = _currentBlendShapes[ARBlendShapeLocation.EyeLookInLeft];
-                float lookOutLeft = _currentBlendShapes[ARBlendShapeLocation.EyeLookOutLeft];
-                float lookUpLeft = _currentBlendShapes[ARBlendShapeLocation.EyeLookUpLeft];
-                float lookDownLeft = _currentBlendShapes[ARBlendShapeLocation.EyeLookDownLeft];
+                float lookInLeft = _pose[ARKitPose.Index.EyeLookInLeft];
+                float lookOutLeft = _pose[ARKitPose.Index.EyeLookOutLeft];
+                float lookUpLeft = _pose[ARKitPose.Index.EyeLookUpLeft];
+                float lookDownLeft = _pose[ARKitPose.Index.EyeLookDownLeft];
                 _leftEyeRot.transform.localEulerAngles = new Vector3(
                     (lookDownLeft - lookUpLeft) * 10.0f,
                     (lookInLeft - lookOutLeft) * 15.0f,
@@ -315,10 +314,10 @@ namespace XFace
             // migime
             if (_rightEyeRot)
             {
-                float lookInRight = _currentBlendShapes[ARBlendShapeLocation.EyeLookInRight];
-                float lookOutRight = _currentBlendShapes[ARBlendShapeLocation.EyeLookOutRight];
-                float lookUpRight = _currentBlendShapes[ARBlendShapeLocation.EyeLookUpRight];
-                float lookDownRight = _currentBlendShapes[ARBlendShapeLocation.EyeLookDownRight];
+                float lookInRight = _pose[ARKitPose.Index.EyeLookInRight];
+                float lookOutRight = _pose[ARKitPose.Index.EyeLookOutRight];
+                float lookUpRight = _pose[ARKitPose.Index.EyeLookUpRight];
+                float lookDownRight = _pose[ARKitPose.Index.EyeLookDownRight];
                 _rightEyeRot.transform.localEulerAngles = new Vector3(
                     (lookDownRight - lookUpRight) * 10.0f,
                     (lookOutRight - lookInRight) * 15.0f,

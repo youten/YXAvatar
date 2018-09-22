@@ -6,12 +6,12 @@ using UnityEngine.XR.iOS;
 
 namespace XFace
 {
-    public static class ARKitFace
+    public static class ARKitPose
     {
         private const string Header = "ARKF0001"; // ARKit Face ver.1
         private const char Comma = ',';
 
-        private static class Index
+        public static class Index
         {
             public const int PosX = 1;
             public const int PosY = 2;

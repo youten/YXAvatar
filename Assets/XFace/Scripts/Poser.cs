@@ -21,33 +21,24 @@ namespace XFace
             }
         }
 
-        private Vector3 _tmpPos;
-        private Quaternion _tmpRot;
-
         public void Update(Vector3 pos, Quaternion rot)
         {
-            _tmpPos = pos;
-            _tmpRot = rot;
-        }
+            _targetRoot.position = pos;
 
-        public void Apply()
-        {
-            _targetRoot.position = _tmpPos;
-            
             if (_targetHeads.Length == 1)
             {
-                _targetHeads[0].localRotation = _defaultHeadsRot[0] * _tmpRot;
+                _targetHeads[0].localRotation = _defaultHeadsRot[0] * rot;
             }
             else if (_targetHeads.Length == 4)
             {
                 _targetHeads[0].localRotation =
-                    _defaultHeadsRot[0] * Quaternion.Lerp(_defaultHeadsRot[0], _tmpRot, 0.5f);
+                    _defaultHeadsRot[0] * Quaternion.Lerp(_defaultHeadsRot[0], rot, 0.5f);
                 _targetHeads[1].localRotation =
-                    _defaultHeadsRot[1] * Quaternion.Lerp(_defaultHeadsRot[1], _tmpRot, 0.35f);
+                    _defaultHeadsRot[1] * Quaternion.Lerp(_defaultHeadsRot[1], rot, 0.35f);
                 _targetHeads[2].localRotation =
-                    _defaultHeadsRot[2] * Quaternion.Lerp(_defaultHeadsRot[2], _tmpRot, 0.1f);
+                    _defaultHeadsRot[2] * Quaternion.Lerp(_defaultHeadsRot[2], rot, 0.1f);
                 _targetHeads[3].localRotation =
-                    _defaultHeadsRot[3] * Quaternion.Lerp(_defaultHeadsRot[3], _tmpRot, 0.05f);
+                    _defaultHeadsRot[3] * Quaternion.Lerp(_defaultHeadsRot[3], rot, 0.05f);
             }
         }
     }
