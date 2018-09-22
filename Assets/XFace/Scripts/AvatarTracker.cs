@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.XR.iOS;
 
 namespace XFace
 {
     public class AvatarTracker : MonoBehaviour
     {
+        private bool _isReceiver;
+
         private enum Model
         {
             Sana,
@@ -102,11 +103,21 @@ namespace XFace
             {
                 _poser = new Poser(_targetPos, _targetHeadRot);
             }
+#if UNITY_EDITOR || !UNITY_IOS
+            // receive
+            StartCoroutine(ReceiveLoop());
+            _isReceiver = true;
+#endif
         }
 
         public void UpdateTracking(Vector3 pos, Vector3 rot, Dictionary<string, float> blendShapes)
         {
             _pose = ARKitPose.ToArray(pos, rot, blendShapes);
+            if (!_isReceiver)
+            {
+                const string server = "192.168.11.255";
+                StartCoroutine(Send(server, ARKitPose.ToString(_pose)));
+            }
         }
 
         private bool _isWearing;
@@ -337,6 +348,72 @@ namespace XFace
         private static Transform FindDeep(Transform root, string targetName)
         {
             return System.Array.Find(root.GetComponentsInChildren<Transform>(true), c => c.name == targetName);
+        }
+
+        // Ref. https://github.com/dsedb/UDPSampleForUnity/        
+        private const int ListenPort = 11340;
+        private static bool received;
+        private static bool sent;
+        private Coroutine sender;
+
+        private struct UdpState
+        {
+            public System.Net.IPEndPoint e;
+            public System.Net.Sockets.UdpClient u;
+        }
+
+        public void SendCallback(System.IAsyncResult ar)
+        {
+            // System.Net.Sockets.UdpClient u = (System.Net.Sockets.UdpClient)ar.AsyncState;
+            sent = true;
+        }
+
+        private IEnumerator Send(string server, string message)
+        {
+            // Debug.Log("sending..");
+            var u = new System.Net.Sockets.UdpClient();
+            u.EnableBroadcast = true;
+            u.Connect(server, ListenPort);
+            var sendBytes = System.Text.Encoding.ASCII.GetBytes(message);
+            sent = false;
+            u.BeginSend(sendBytes, sendBytes.Length, SendCallback, u);
+            while (!sent)
+            {
+                yield return null;
+            }
+            u.Close();
+            sender = null;
+            // Debug.Log("done.");
+        }
+
+        public void ReceiveCallback(System.IAsyncResult ar)
+        {
+            var u = ((UdpState) ar.AsyncState).u;
+            var e = ((UdpState) ar.AsyncState).e;
+            var receiveBytes = u.EndReceive(ar, ref e);
+            var receiveString = System.Text.Encoding.ASCII.GetString(receiveBytes);
+            received = true;
+
+            _pose = ARKitPose.FromString(receiveString);
+        }
+
+        private IEnumerator ReceiveLoop()
+        {
+            var e = new System.Net.IPEndPoint(System.Net.IPAddress.Any, ListenPort);
+            var u = new System.Net.Sockets.UdpClient(e);
+            u.EnableBroadcast = true;
+            var s = new UdpState();
+            s.e = e;
+            s.u = u;
+            for (;;)
+            {
+                received = false;
+                u.BeginReceive(ReceiveCallback, s);
+                while (!received)
+                {
+                    yield return null;
+                }
+            }
         }
     }
 }

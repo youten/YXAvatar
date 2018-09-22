@@ -17,6 +17,7 @@ namespace XFace
 
         [SerializeField] private Transform _targetCamera;
         [SerializeField] private ARKitTracker _targetArKitTracker;
+        [SerializeField] private Canvas _uiCanvas;
 
         private void OnEnable()
         {
@@ -81,7 +82,11 @@ namespace XFace
             {
                 if (vec.y > 0)
                 {
-                    //_targetArKitTracker.ToggleActiveAvatarWear();
+                    // toggle UI show/hide
+                    if (_uiCanvas)
+                    {
+                        _uiCanvas.enabled = !_uiCanvas.enabled;
+                    }
                 }
             }
             else
