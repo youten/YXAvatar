@@ -413,6 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _targetCamera: {fileID: 333983849}
   _targetArKitTracker: {fileID: 206109745}
+  _uiCanvas: {fileID: 0}
 --- !u!114 &932605379
 MonoBehaviour:
   m_ObjectHideFlags: 0

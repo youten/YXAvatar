@@ -291,9 +291,9 @@ PlayerSettings:
     m_Automatic: 1
   m_BuildTargetVRSettings:
   - m_BuildTarget: Android
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices:
-    - Oculus
+    - daydream
   - m_BuildTarget: Metro
     m_Enabled: 0
     m_Devices: []
