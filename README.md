@@ -2,6 +2,8 @@ YXAvatar
 ====
 iPhone X Face Tracking Character Avatar App with UniVRM
 
+![Figure 1 Unity Editor](arkit-vroid-05.png) 
+
 # Assets and Folder description
 - Models/YMei003: VRM made with VRoid Studio.
 - TouchScript: https://github.com/TouchScript/TouchScript
