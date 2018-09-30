@@ -584,7 +584,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8601eb3935a4425eb5ab7e7e9ca0c13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetModel: 6
+  _targetModel: 0
   _targetPos: {fileID: 1377988139}
   _targetHeadRot: {fileID: 956230834}
   _headRot2: {fileID: 1673946824}
