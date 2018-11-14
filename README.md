@@ -5,10 +5,10 @@ iPhone X Face Tracking Character Avatar App with UniVRM
 ![Figure 1 Unity Editor](arkit-vroid-05.png) 
 
 # Assets and Folder description
-- Models/YMei003: VRM made with VRoid Studio. https://vroid.pixiv.net/
+- Models/YMei003: VRM made with VRoid Studio v0.2.15. https://vroid.pixiv.net/
 - TouchScript: https://github.com/TouchScript/TouchScript
 - UnityARKitPlugin: https://bitbucket.org/Unity-Technologies/unity-arkit-plugin
-- VRM: UniVRM 0.43 https://github.com/dwango/UniVRM
+- VRM: UniVRM 0.44 https://github.com/dwango/UniVRM
 - XFace: Main Scripts is here.
 
 # Scenes
