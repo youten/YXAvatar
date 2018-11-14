@@ -12,7 +12,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 2000
   stringTagMap:
     RenderType: Opaque
   disabledShaderPasses: []
@@ -43,8 +43,12 @@ Material:
         m_Texture: {fileID: 2800000, guid: 82254bec202a0418b9db6286a0a48df4, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadingGradeTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SphereAdd:
-        m_Texture: {fileID: 2800000, guid: 968073c210cd84f6e8e3088f30d98098, type: 3}
+        m_Texture: {fileID: 2800000, guid: d273efaadd04e419cbadee10df2c90aa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -54,21 +58,22 @@ Material:
     - _Cutoff: 0.5
     - _DebugMode: 0
     - _DstBlend: 0
-    - _IsFirstSetup: 0
+    - _IndirectLightIntensity: 0.1
     - _LightColorAttenuation: 0
     - _OutlineColorMode: 0
     - _OutlineCullMode: 1
     - _OutlineLightingMix: 1
     - _OutlineScaledMaxDistance: 2.71
-    - _OutlineWidth: 0.25
+    - _OutlineWidth: 0.172
     - _OutlineWidthMode: 2
     - _ReceiveShadowRate: 1
     - _ShadeShift: -0.6
     - _ShadeToony: 0
+    - _ShadingGradeRate: 1
     - _SrcBlend: 1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0.71323526, g: 0.5349988, b: 0.41955015, a: 1}
+    - _OutlineColor: {r: 0.2735849, g: 0.089044146, b: 0.12616803, a: 1}
     - _ShadeColor: {r: 1, g: 0.83795196, b: 0.8349056, a: 1}

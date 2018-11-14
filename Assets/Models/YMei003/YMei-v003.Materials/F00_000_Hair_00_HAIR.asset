@@ -8,8 +8,7 @@ Material:
   m_PrefabInternal: {fileID: 0}
   m_Name: F00_000_Hair_00_HAIR
   m_Shader: {fileID: 4800000, guid: 1a97144e4ad27a04aafd70f7b915cedb, type: 3}
-  m_ShaderKeywords: MTOON_OUTLINE_COLOR_FIXED MTOON_OUTLINE_WIDTH_SCREEN _ALPHATEST_ON
-    _NORMALMAP
+  m_ShaderKeywords: _ALPHATEST_ON _NORMALMAP
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -29,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e74d8a31de99043ec8a7db03b76007d3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3c27b9938ab654c7499e6124d5e451b8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OutlineWidthTexture:
@@ -41,11 +40,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShadeTexture:
-        m_Texture: {fileID: 2800000, guid: e74d8a31de99043ec8a7db03b76007d3, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3c27b9938ab654c7499e6124d5e451b8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ShadingGradeTexture:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SphereAdd:
-        m_Texture: {fileID: 2800000, guid: 75cd45988f26f41e8ac8d2459ec16bbd, type: 3}
+        m_Texture: {fileID: 2800000, guid: e74d8a31de99043ec8a7db03b76007d3, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
@@ -55,21 +58,22 @@ Material:
     - _Cutoff: 0.5
     - _DebugMode: 0
     - _DstBlend: 0
-    - _IsFirstSetup: 0
+    - _IndirectLightIntensity: 0.1
     - _LightColorAttenuation: 0
     - _OutlineColorMode: 0
     - _OutlineCullMode: 1
     - _OutlineLightingMix: 1
     - _OutlineScaledMaxDistance: 2.71
-    - _OutlineWidth: 0.25
-    - _OutlineWidthMode: 2
+    - _OutlineWidth: 0.172
+    - _OutlineWidthMode: 0
     - _ReceiveShadowRate: 1
     - _ShadeShift: -0.3
     - _ShadeToony: 0
+    - _ShadingGradeRate: 1
     - _SrcBlend: 1
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 0.8964456, g: 0.76087284, b: 0.17070602, a: 1}
     - _EmissionColor: {r: 0.9397368, g: 0.26212654, b: 0.6487971, a: 1}
-    - _OutlineColor: {r: 0.8161765, g: 0.75881237, b: 0.43809474, a: 1}
+    - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShadeColor: {r: 0.7429591, g: 0.5234552, b: 0.116186194, a: 1}

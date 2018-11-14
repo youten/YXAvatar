@@ -12,21 +12,21 @@ MonoBehaviour:
   m_Name: BlendShape
   m_EditorClassIdentifier: 
   Clips:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: d8451f573b7c14b9e82b400787752bc1, type: 2}
+  - {fileID: 11400000, guid: afd34a857bbcb4aec9975c69e898eeea, type: 2}
+  - {fileID: 11400000, guid: f3081db85954f4faa899406609bb650b, type: 2}
+  - {fileID: 11400000, guid: 1296b13d826bc4733bc1f3cfda2d7880, type: 2}
+  - {fileID: 11400000, guid: 4af5559665672464399c4f93034e5158, type: 2}
+  - {fileID: 11400000, guid: a8d566f9ada434204845f789b4f8687a, type: 2}
+  - {fileID: 11400000, guid: c6520c47478504e80b282a6f9b4e2974, type: 2}
+  - {fileID: 11400000, guid: e440f0f480ad8455a97e219216475f40, type: 2}
+  - {fileID: 11400000, guid: 59a7878ae0ac247a0b9e1d022c81bf93, type: 2}
+  - {fileID: 11400000, guid: 7e18502a5c7ab4c6c8585e817ea51497, type: 2}
+  - {fileID: 11400000, guid: ae8c43e48c1ea41ae9fd79c9b811584f, type: 2}
+  - {fileID: 11400000, guid: fe71b071775884356b7ccc5e363179c3, type: 2}
+  - {fileID: 11400000, guid: ae80ae8542c2d4c3abf47b405f23a0c4, type: 2}
+  - {fileID: 11400000, guid: 16e0651a1144d434b87970097ad73e14, type: 2}
+  - {fileID: 11400000, guid: 4f1feb2847fd4478cb4e7c5796bb5567, type: 2}
+  - {fileID: 11400000, guid: e3d92e0ff5f2d4c3aab893ee68a3d528, type: 2}
+  - {fileID: 11400000, guid: f1fcf39ed14fe4deb9fb8dd08ea00d0c, type: 2}
+  - {fileID: 11400000, guid: 6174de1c891884a9bb1de5b1c1eefcd3, type: 2}
